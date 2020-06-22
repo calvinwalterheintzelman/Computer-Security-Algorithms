@@ -1,0 +1,53 @@
+SHELL=/bin/sh
+PATH=/usr/local/lib/mh:$PATH
+MAILDIR=$HOME/Mail
+LOGFILE=$HOME/Mail/logfile
+SENDMAIL=/usr/sbin/sendmail
+#VERBOSE=1
+VERBOSE=0
+EOL="
+"
+LOG="$EOL$EOL$EOL"
+LOG="New message log:$EOL"
+LOG="$EOL"
+
+# Homework Number: 11
+# Name: Calvin Walter Heintzelman
+# ECN Login: cheintze
+# Due Date: 4/11/2019
+
+# checks if the email is sent to multiple people
+# if it is, send it to spam
+:0
+* ^From: <[_-a-z0-9@\.]*>[\n ]*,
+spamFolder
+
+# checks if the email subject has any unecessary punctuation in it
+# if it does, send it to spam
+:0
+* ^Subject: [ :alnum:]*[:punct:]
+spamFolder
+
+
+# checks if the email subject has any of these words in it
+# if it does, send it to spam
+:0
+* ^Subject: .*(ovum|magento|profit|diploma|degree|certificate|medication[s]?|medicine|buy)
+spamFolder
+
+# checks if the email body has any of these words in it
+# if it does, send it to spam
+:0 B
+* (ovum|magento|slots|price|profit|buy)
+spamFolder
+
+# checks if the email is really large
+# if it is, send it to spam
+:0 B
+* > 10000
+spamFolder
+
+# if all previous checks fail, the message makes it to my inbox
+:0 :
+/var/mail/ece404f9
+
